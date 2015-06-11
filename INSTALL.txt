@@ -1,0 +1,83 @@
+## Install jdk and ssh
+>> sudo apt-get install default-jdk ssh
+
+## Create and install certificate
+>> ssh-keygen -t rsa -P ""
+>> cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
+
+>> ssh localhost
+
+## HADOOP
+- Download
+>> cd /usr/local
+>> wget http://it.apache.contactlab.it/hadoop/common/hadoop-2.7.0/hadoop-2.7.0.tar.gz
+>> tar xvzf hadoop-2.7.0.tar.gz
+>> sudo mv hadoop-2.7.0 hadoop
+
+- Set up variables
+>> sudo nano ~./bashrc
+# Hadoop Variables
+export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+export HADOOP_HOME=/usr/local/hadoop
+export PATH=$PATH:$HADOOP_HOME/bin
+export PATH=$PATH:$HADOOP_HOME/sbin
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME>
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"
+export HADOOP_CLASSPATH=${JAVA_HOME}/lib/tools.jar
+
+>> source ~/.bashrc
+
+- Change permissions 
+>> sudo chown -R $USER /usr/local/hadoop/
+>> cd /usr/local/hadoop/etc/hadoop
+
+
+- Create HDFS directory
+>> sudo mkdir -p /user/hadoop
+>> sudo chown -R $USER /user/hadoop
+
+>> sudo nano hadoop-env.sh
+# The java implementation to use.
+export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+
+>> sudo nano core-site.mxl
+<configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://localhost:9000</value>
+    </property>
+    <property>
+        <name>hadoop.tmp.dir</name>
+        <value>/user/hadoop</value>
+    </property>
+</configuration>
+
+>> sudo cp mapred-site.xml.template mapred-site.xml
+>> sudo nano mapred-site.xml
+<configuration>
+    <property>
+        <name>mapred.job.tracker</name>
+        <value>localhost:9001</value>
+    </property>
+</configuration>
+
+>> sudo nano hdfs-site.xml
+<configuration>
+    <property>
+        <name>dfs.replication</name>
+        <value>1</value>
+    </property>
+</configuration>
+
+IMPORTANT: this setting is in pseudo-distributed mode, but later we should switch to fully distributed
+
+>> hdfs namenode -format
+
+Now take a look at http://localhost:50070
+
+## RUNNING
+
