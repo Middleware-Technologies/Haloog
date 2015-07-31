@@ -7,8 +7,9 @@ Andy Baio, creater of XOXO and former CTO of Kickstarter, played an important ro
 
 Using Hadoop in a fully distributed cluster (use your own phisical/virtual machines) provide the following information:
 
-Waxy.org total pageviews per day in the entire time range
-Video downloads (wmv files) per day in the entire time range. (Aggregate the two video versions - normal and remixed)
-Number of referring domains per day (between the 22nd of April and the 30th of May)
-Number of referrals per domain (between the 22nd of April and the 30th of May)
+- Waxy.org total pageviews per day in the entire time range
+- Video downloads (wmv files) per day in the entire time range. (Aggregate the two video versions - normal and remixed)
+- Number of referring domains per day (between the 22nd of April and the 30th of May)
+- Number of referrals per domain (between the 22nd of April and the 30th of May)
+
 Optional: Provide charts for the information
