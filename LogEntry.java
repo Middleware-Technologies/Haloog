@@ -1,59 +1,41 @@
 package haloog;
 
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
-/*
- * Copyright (c) Ian F. Darwin, http://www.darwinsys.com/, 1996-2002.
- * All rights reserved. Software written by Ian F. Darwin and others.
- * $Id: LICENSE,v 1.8 2004/02/09 03:33:38 ian Exp $
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS''
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
- * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS
- * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- * 
- * Java, the Duke mascot, and all variants of Sun's Java "steaming coffee
- * cup" logo are trademarks of Sun Microsystems. Sun's, and James Gosling's,
- * pioneering role in inventing and promulgating (and standardizing) the Java 
- * language and environment is gratefully acknowledged.
- * 
- * The pioneering role of Dennis Ritchie and Bjarne Stroustrup, of AT&T, for
- * inventing predecessor languages C and C++ is also gratefully acknowledged.
+/**
+ * Represents a single log entry making easier to get informations from it
  */
+import java.util.Locale;
 import java.util.regex.*;
 
 
-/**
- * Parse an Apache log file with Regular Expressions
- */
 public class LogEntry {
+	
+	/** Pattern representing the structure of a long entry **/
+	private static final String logEntryPattern = "^([\\w.]+) (\\S+) (.+?) \\[([\\w:/]+\\s[+\\-]\\d{4})\\] \"(.+?)\" (\\d{3}) (\\S+) \"(.*?)\" \"(.*?)\"";
 
+	/** Pattern for recognizing a URL, based off RFC 3986 **/
+	private static final Pattern urlPattern = Pattern.compile(
+			"(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
+					+ "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
+					+ "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
+					Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+	
+	/** The entire log entry as string **/
 	private String logEntryLine;
-
-	private String logEntryPattern = "^([\\w.]+) (\\S+) (.+?) \\[([\\w:/]+\\s[+\\-]\\d{4})\\] \"(.+?)\" (\\d{3}) (\\S+) \"(.*?)\" \"(.*?)\"";
-
+	
+	/** The date of the log **/
 	private Date loggedTime;
+	
+	/** The logged request **/
 	private String loggedRequest;
+	
+	/** The logged referer **/
 	private String loggedReferer;
 
 	public LogEntry(String logEntryLine) {
@@ -79,7 +61,7 @@ public class LogEntry {
 
 		DateFormat format = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss X", Locale.US);
 		loggedTime = format.parse(matcher.group(4));
-		
+
 		loggedRequest = matcher.group(5);
 		loggedReferer = matcher.group(8);
 	}
@@ -94,5 +76,34 @@ public class LogEntry {
 
 	public String getLoggedReferer() {
 		return loggedReferer;
+	}
+
+	/**
+	 * Tries to extract the referer's domain. If it doesn't succeed, returns a string that reflects this fact.
+	 * 
+	 * @return String | "unknown domain"
+	 */
+	public String getRefererDomain() {
+		
+		// Look for an URL in the string
+		Matcher matcher = urlPattern.matcher(loggedReferer);
+		
+		if (matcher.find()) {
+			// If one is found, try to get the domain (host) from it
+			URI domain;
+			
+			try {
+				domain = new URI(matcher.group());
+			} catch (URISyntaxException e) {
+				domain = null;
+			}
+
+			if ( domain != null ) {
+				return domain.getHost().replace("www.", "");
+			}
+
+		}
+
+		return "unknown domain";
 	}
 }
