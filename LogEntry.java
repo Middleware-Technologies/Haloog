@@ -16,6 +16,8 @@ import java.util.regex.*;
 
 public class LogEntry {
 	
+	public static final String NO_DOMAIN = "unknown domain";
+	
 	/** Pattern representing the structure of a long entry **/
 	private static final String logEntryPattern = "^([\\w.]+) (\\S+) (.+?) \\[([\\w:/]+\\s[+\\-]\\d{4})\\] \"(.+?)\" (\\d{3}) (\\S+) \"(.*?)\" \"(.*?)\"";
 
@@ -95,12 +97,16 @@ public class LogEntry {
 			try {
 				domain = new URI(matcher.group());
 			} catch (URISyntaxException e) {
-				domain = null;
+				return NO_DOMAIN;
 			}
 
-			if ( domain != null ) {
+			try {
 				return domain.getHost().replace("www.", "");
+			} catch (NullPointerException e) {
+				return NO_DOMAIN;
 			}
+			
+			// Yeah, I don't like it either
 
 		}
 
