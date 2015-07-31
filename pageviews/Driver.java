@@ -1,3 +1,7 @@
+/**
+ * Manages the MapReduce process that counts pageviews per day in the given log file
+ */
+
 package haloog.pageviews;
 
 import org.apache.hadoop.conf.Configuration;

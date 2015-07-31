@@ -1,3 +1,7 @@
+/**
+ * Reduce class for the downloads job. It receives <day>: list(<int>) and sums up the numbers in the list to obtain the number of downloads in the day.
+ */
+
 package haloog.downloads;
 import java.io.IOException;
 import java.util.Iterator;

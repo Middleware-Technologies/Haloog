@@ -1,3 +1,7 @@
+/**
+ * Map class for the pageviews job. For each log entry it outputs a key-value pair of kind <day>:<1>
+ */
+
 package haloog.pageviews;
 
 import haloog.LogEntry;
@@ -28,7 +32,7 @@ public class Map extends MapReduceBase implements Mapper<LongWritable, Text, Tex
 		// Parse the log entry to be more accessible
 		logEntry = new LogEntry(value.toString());
 		
-		// The key of the output is the day
+		// The key of the output is the day formatted ad yyyyMMdd
 		outKey = new Text(keyDateFormat.format(logEntry.getLoggedTime()));
 		
 		output.collect(outKey, one);

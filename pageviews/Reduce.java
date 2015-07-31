@@ -1,3 +1,6 @@
+/**
+ * Reduce class for the pageviews job. It receives <day>: list(<int>) and sums up the numbers in the list to obtain the number of pageviews in the day.
+ */
 package haloog.pageviews;
 import java.io.IOException;
 import java.util.Iterator;

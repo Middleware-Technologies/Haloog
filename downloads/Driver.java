@@ -1,3 +1,7 @@
+/**
+ * Manages the MapReduce process that counts the video downloads (wmv files) per day in the given log file
+ */
+
 package haloog.downloads;
 
 import org.apache.hadoop.conf.Configuration;
