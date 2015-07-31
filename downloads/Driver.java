@@ -22,7 +22,7 @@ public class Driver extends Configured implements Tool {
 		Configuration conf = getConf();
 		
         JobConf job = new JobConf(conf, Driver.class);
-        job.setJobName("haloog-pageviews");
+        job.setJobName("haloog-downloads");
 		
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
