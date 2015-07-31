@@ -17,7 +17,7 @@ import org.apache.hadoop.mapred.Reporter;
 public class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable> {
 
 	private final static IntWritable one = new IntWritable(1);
-	private Text views = new Text("PageViews:");	
+	private Text outKey;	
 	private LogEntry logEntry;
 
 	private DateFormat keyDateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -25,11 +25,13 @@ public class Map extends MapReduceBase implements Mapper<LongWritable, Text, Tex
 	@Override
 	public void map(LongWritable key, Text value, OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException {
 		
+		// Parse the log entry to be more accessible
 		logEntry = new LogEntry(value.toString());
 		
-		views = new Text(keyDateFormat.format(logEntry.getLoggedTime()));
-
-		output.collect(views, one);
+		// The key of the output is the day
+		outKey = new Text(keyDateFormat.format(logEntry.getLoggedTime()));
+		
+		output.collect(outKey, one);
 	}
 
 }
