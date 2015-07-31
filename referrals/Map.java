@@ -27,14 +27,13 @@ public class Map extends MapReduceBase implements Mapper<LongWritable, Text, Tex
 	private Text outKey;	
 	private LogEntry logEntry;
 
-
-	private DateFormat keyDateFormat = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss X", Locale.US);
+	private DateFormat logDateFormat = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss X", Locale.US);
 	private Date startDate, endDate;
 	
 	public Map() {
 		try {
-			startDate = keyDateFormat.parse("22/Apr/2003:00:00:00 -0700");
-			endDate = keyDateFormat.parse("30/May/2003:23:59:59 -0700");
+			startDate = logDateFormat.parse("22/Apr/2003:00:00:00 -0700");
+			endDate = logDateFormat.parse("30/May/2003:23:59:59 -0700");
 		} catch (ParseException e) {
 			// Ignore
 		}
