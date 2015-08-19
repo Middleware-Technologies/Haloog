@@ -18,13 +18,21 @@ Optional: Provide charts for the information
 Before running the program, you should create on HDFS a folder where to put the log file. You can refer to "[Using the command line to manage files on HDFS]"(http://hortonworks.com/hadoop-tutorial/using-commandline-manage-files-hdfs) to know how.
 
 To run the jar file
-```hadoop jar Haloog.jar class /path/to/input /path/to/input```
+```
+hadoop jar Haloog.jar class /path/to/input /path/to/input
+```
 
 Where __class__ should be the driver class for the wanted operation (i.e. downloads, pageviews, referrals, or referring). For example
-```hadoop jar Haloog.jar haloog.referring.Driver /user/middle/haloog/input/star_wars_kid.log /user/middle/haloog/output```
+```
+hadoop jar Haloog.jar haloog.referring.Driver /user/middle/haloog/input/star_wars_kid.log /user/middle/haloog/output
+```
 
 To show the result run
-```hadoop fs -cat /path/to/output/*```
+```
+hadoop fs -cat /path/to/output/*
+```
  
 Before running a second time, you should delete the output folder 
-```hadoop fs -rm -r /path/to/output*```
+```
+hadoop fs -rm -r /path/to/output*
+```
