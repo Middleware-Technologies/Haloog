@@ -15,7 +15,7 @@ Using Hadoop in a fully distributed cluster (use your own phisical/virtual machi
 Optional: Provide charts for the information
 
 ## Usage
-Before running the program, you should create on HDFS a folder where to put the log file. You can refer to "[Using the command line to manage files on HDFS]"(http://hortonworks.com/hadoop-tutorial/using-commandline-manage-files-hdfs) to know how.
+Before running the program, you should create on HDFS a folder where to put the log file. You can refer to "[Using the command line to manage files on HDFS](http://hortonworks.com/hadoop-tutorial/using-commandline-manage-files-hdfs)" to know how.
 
 To run the jar file
 ```
